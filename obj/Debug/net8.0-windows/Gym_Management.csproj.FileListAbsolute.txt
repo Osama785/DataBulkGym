@@ -52,9 +52,7 @@ C:\Users\sch\source\repos\Gym_Management\Gym_Management\bin\Debug\net8.0-windows
 C:\Users\sch\source\repos\Gym_Management\Gym_Management\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.csproj.AssemblyReference.cache
 C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.DashBord.resources
-C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.Member.resources
 C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.Properties.Resources.resources
-C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.Trainers.resources
 C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.csproj.GenerateResource.cache
 C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.AssemblyInfoInputs.cache
@@ -66,3 +64,7 @@ C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows
 C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.pdb
 C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.genruntimeconfig.cache
 C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\ref\Gym_Management.dll
+C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.sourcelink.json
+C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.Membership.resources
+C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.Member.resources
+C:\Users\sch\source\repos\Gym_Management\Gym_Management\obj\Debug\net8.0-windows\Gym_Management.Trainers.resources

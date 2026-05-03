@@ -31,7 +31,10 @@ namespace Gym_Management
 
         private void button4_Click(object sender, EventArgs e)
         {
-            // Add Equipment form logic here
+            Membership ms = new Membership();
+            ms.FormClosed += (s, args) => Application.Exit(); ;
+            ms.Show();
+            this.Hide();
         }
 
         private void button5_Click(object sender, EventArgs e)

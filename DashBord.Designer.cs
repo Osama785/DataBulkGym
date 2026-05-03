@@ -32,7 +32,7 @@
             Member_Mangment = new Button();
             button2 = new Button();
             button3 = new Button();
-            Equpment_inventory = new Button();
+            Membership = new Button();
             Branch_Manger_info = new Button();
             SuspendLayout();
             // 
@@ -71,16 +71,16 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
-            // Equpment_inventory
+            // Membership
             // 
-            Equpment_inventory.Anchor = AnchorStyles.None;
-            Equpment_inventory.Location = new Point(124, 275);
-            Equpment_inventory.Name = "Equpment_inventory";
-            Equpment_inventory.Size = new Size(302, 55);
-            Equpment_inventory.TabIndex = 3;
-            Equpment_inventory.Text = "Equpment inventory";
-            Equpment_inventory.UseVisualStyleBackColor = true;
-            Equpment_inventory.Click += button4_Click;
+            Membership.Anchor = AnchorStyles.None;
+            Membership.Location = new Point(124, 275);
+            Membership.Name = "Membership";
+            Membership.Size = new Size(302, 55);
+            Membership.TabIndex = 3;
+            Membership.Text = "Membership";
+            Membership.UseVisualStyleBackColor = true;
+            Membership.Click += button4_Click;
             // 
             // Branch_Manger_info
             // 
@@ -103,7 +103,7 @@
             Controls.Add(button3);
             Controls.Add(Member_Mangment);
             Controls.Add(button2);
-            Controls.Add(Equpment_inventory);
+            Controls.Add(Membership);
             Controls.Add(Branch_Manger_info);
             DoubleBuffered = true;
             Name = "DashBord";
@@ -118,7 +118,7 @@
         private Button Member_Mangment;
         private Button button2;
         private Button button3;
-        private Button Equpment_inventory;
+        private Button Membership;
         private Button Branch_Manger_info;
     }
 }

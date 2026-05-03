@@ -222,7 +222,7 @@ namespace Gym_Management
             }
         }
 
-        // Master-Detail Trigger: Clicking a row in the Member table filters the Phone table
+        //Clicking a row in the Member table filters the Phone table
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -334,7 +334,6 @@ namespace Gym_Management
         private void pictureBox1_Click(object sender, EventArgs e) { }
         private void comboBoxMembership_SelectedIndexChanged(object sender, EventArgs e) { }
 
-        #endregion
 
         private void Add_Member_Click(object sender, EventArgs e)
         {
@@ -734,5 +733,7 @@ namespace Gym_Management
                 MessageBox.Show("Update Error: " + ex.Message);
             }
         }
+
+     #endregion
     }
 }

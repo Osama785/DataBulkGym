@@ -8,26 +8,28 @@ namespace Gym_Management
 {
     public partial class Trainers : Form
     {
+        private int _selectedTrainerID = -1;
+
         public Trainers()
         {
             InitializeComponent();
 
             dataGridView1.CellClick += dataGridView1_CellClick;
-
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.MultiSelect = false;
+            dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView2.MultiSelect = false;
 
             StyleDataGridView();
-            LoadTrainerData();
-            ClearFields();
-
             SetupGenderComboBox();
             SetupShiftComboBox();
             SetupSpecialityComboBox();
+            SetupWorkoutPlanComboBoxes();
             LoadBranchOptions();
+            LoadTrainerData();
+            LoadWorkoutPlanData();
+            ClearFields();
         }
-
-        #region ComboBox Data Loading Methods
 
         private void SetupGenderComboBox()
         {
@@ -36,6 +38,15 @@ namespace Gym_Management
             comboBoxGender.Items.Add("Female");
             comboBoxGender.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxGender.SelectedIndex = -1;
+            comboBoxGender.SelectedIndexChanged += comboBoxGender_SelectedIndexChanged;
+        }
+
+        private void comboBoxGender_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxGender.SelectedIndex == -1)
+                LoadBranchOptions();
+            else
+                LoadBranchOptions(comboBoxGender.Text);
         }
 
         private void SetupShiftComboBox()
@@ -64,20 +75,46 @@ namespace Gym_Management
             comboBoxSpeciality.SelectedIndex = -1;
         }
 
-        private void LoadBranchOptions()
+        private void SetupWorkoutPlanComboBoxes()
+        {
+            comboBoxWP_Name.Items.Clear();
+            comboBoxWP_Name.Items.Add("Weight Loss");
+            comboBoxWP_Name.Items.Add("Muscle Gain");
+            comboBoxWP_Name.Items.Add("Fitness Starter");
+            comboBoxWP_Name.Items.Add("Bodybuilding");
+            comboBoxWP_Name.Items.Add("Cardio Blast");
+            comboBoxWP_Name.Items.Add("Fat Burn");
+            comboBoxWP_Name.Items.Add("Strength Builder");
+            comboBoxWP_Name.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxWP_Name.SelectedIndex = -1;
+
+            comboBoxWP_Intensity.Items.Clear();
+            comboBoxWP_Intensity.Items.Add("Low");
+            comboBoxWP_Intensity.Items.Add("Medium");
+            comboBoxWP_Intensity.Items.Add("High");
+            comboBoxWP_Intensity.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxWP_Intensity.SelectedIndex = -1;
+        }
+
+        private void LoadBranchOptions(string gender = "")
         {
             try
             {
                 using (SqlConnection con = new SqlConnection(DBconnection.ConnectionString))
                 {
                     con.Open();
-                    string query = "SELECT Branch_ID, Type, City, Area FROM Branch_Manager";
+                    string query;
+                    if (gender == "Male")
+                        query = "SELECT Branch_ID, Type, City, Area FROM Branch_Manager WHERE Type IN ('Male', 'Mixed')";
+                    else if (gender == "Female")
+                        query = "SELECT Branch_ID, Type, City, Area FROM Branch_Manager WHERE Type IN ('Female', 'Mixed')";
+                    else
+                        query = "SELECT Branch_ID, Type, City, Area FROM Branch_Manager";
+
                     SqlDataAdapter sda = new SqlDataAdapter(query, con);
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
-
                     dt.Columns.Add("BranchInfo", typeof(string), "Type + ' | ' + City + ' - ' + Area");
-
                     comboBoxBranch.DataSource = dt;
                     comboBoxBranch.DisplayMember = "BranchInfo";
                     comboBoxBranch.ValueMember = "Branch_ID";
@@ -91,25 +128,28 @@ namespace Gym_Management
             }
         }
 
-        #endregion
-
-        #region Table Data Loading
-
         private void ClearFields()
         {
             txtID.Clear();
             txtFname.Clear();
             txtLname.Clear();
             txtPhone.Clear();
-
             comboBoxGender.SelectedIndex = -1;
             comboBoxShift.SelectedIndex = -1;
             comboBoxSpeciality.SelectedIndex = -1;
-
             if (comboBoxBranch.DataSource != null)
                 comboBoxBranch.SelectedIndex = -1;
-
             dataGridView1.ClearSelection();
+        }
+
+        private void ClearPlanFields()
+        {
+            comboBoxWP_Name.SelectedIndex = -1;
+            txtWP_Duration.Clear();
+            comboBoxWP_Intensity.SelectedIndex = -1;
+            txtWP_TrainerInfo.Clear();
+            _selectedTrainerID = -1;
+            dataGridView2.ClearSelection();
         }
 
         private void LoadTrainerData()
@@ -119,8 +159,7 @@ namespace Gym_Management
                 using (SqlConnection con = new SqlConnection(DBconnection.ConnectionString))
                 {
                     con.Open();
-                    string query = "SELECT * FROM Trainer";
-                    SqlDataAdapter sda = new SqlDataAdapter(query, con);
+                    SqlDataAdapter sda = new SqlDataAdapter("SELECT * FROM Trainer", con);
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
                     dataGridView1.DataSource = dt;
@@ -132,29 +171,57 @@ namespace Gym_Management
             }
         }
 
-        // Clicking a row populates the input fields for easy editing
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void LoadWorkoutPlanData()
         {
-            if (e.RowIndex >= 0)
+            try
             {
-                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
-                txtID.Text    = row.Cells["ID"].Value?.ToString();
-                txtFname.Text = row.Cells["Fname"].Value?.ToString();
-                txtLname.Text = row.Cells["Lname"].Value?.ToString();
-                txtPhone.Text = row.Cells["Phone"].Value?.ToString();
-
-                comboBoxGender.SelectedItem    = row.Cells["Gender"].Value?.ToString();
-                comboBoxShift.SelectedItem     = row.Cells["Shift"].Value?.ToString();
-                comboBoxSpeciality.SelectedItem = row.Cells["Speciality"].Value?.ToString();
-
-                if (row.Cells["Branch_ID"].Value != null)
-                    comboBoxBranch.SelectedValue = row.Cells["Branch_ID"].Value;
+                using (SqlConnection con = new SqlConnection(DBconnection.ConnectionString))
+                {
+                    con.Open();
+                    string query = @"SELECT wp.ID, wp.Name, wp.Duration, wp.Intensity_Level,
+                                            t.Fname + ' ' + t.Lname AS Trainer
+                                     FROM Workout_Plan wp
+                                     JOIN Trainer t ON wp.Trainer_ID = t.ID";
+                    SqlDataAdapter sda = new SqlDataAdapter(query, con);
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    dataGridView2.DataSource = dt;
+                    ApplyStyle(dataGridView2);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Workout Plan Error: " + ex.Message);
             }
         }
 
-        #endregion
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
 
-        #region UI Styling
+            DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+            txtID.Text = row.Cells["ID"].Value?.ToString();
+            txtFname.Text = row.Cells["Fname"].Value?.ToString();
+            txtLname.Text = row.Cells["Lname"].Value?.ToString();
+            txtPhone.Text = row.Cells["Phone"].Value?.ToString();
+
+            string gender = row.Cells["Gender"].Value?.ToString();
+            comboBoxGender.SelectedIndex = -1;
+            if (!string.IsNullOrEmpty(gender))
+            {
+                LoadBranchOptions(gender);
+                comboBoxGender.Text = gender;
+            }
+
+            comboBoxShift.SelectedItem = row.Cells["Shift"].Value?.ToString();
+            comboBoxSpeciality.SelectedItem = row.Cells["Speciality"].Value?.ToString();
+
+            if (row.Cells["Branch_ID"].Value != null)
+                comboBoxBranch.SelectedValue = row.Cells["Branch_ID"].Value;
+
+            _selectedTrainerID = Convert.ToInt32(row.Cells["ID"].Value);
+            txtWP_TrainerInfo.Text = txtFname.Text + " " + txtLname.Text;
+        }
 
         private void StyleDataGridView()
         {
@@ -164,7 +231,7 @@ namespace Gym_Management
         private void ApplyStyle(DataGridView dgv)
         {
             dgv.BorderStyle = BorderStyle.None;
-            dgv.BackgroundColor = Color.White;
+            dgv.BackgroundColor = SystemColors.ActiveCaption;
             dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(238, 239, 249);
             dgv.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
@@ -180,10 +247,6 @@ namespace Gym_Management
             dgv.RowHeadersVisible = false;
         }
 
-        #endregion
-
-        #region Form Controls & Navigation
-
         private void Back_Click(object sender, EventArgs e)
         {
             DashBord Das = new DashBord();
@@ -192,13 +255,13 @@ namespace Gym_Management
             this.Hide();
         }
 
-        #endregion
-
-        #region CRUD Operations
+        private void Clear_Fields_Click(object sender, EventArgs e)
+        {
+            ClearFields();
+        }
 
         private void Add_Trainer_Click(object sender, EventArgs e)
         {
-            // Validation
             if (string.IsNullOrWhiteSpace(txtFname.Text))
             { MessageBox.Show("Validation Error: First Name cannot be empty."); return; }
             if (string.IsNullOrWhiteSpace(txtLname.Text))
@@ -210,27 +273,24 @@ namespace Gym_Management
             if (txtPhone.Text.Length != 11 || !txtPhone.Text.StartsWith("01"))
             { MessageBox.Show("Validation Error: Phone must be 11 digits starting with '01'."); return; }
 
-            string formattedFname = char.ToUpper(txtFname.Text[0]) + txtFname.Text.Substring(1).ToLower();
-            string formattedLname = char.ToUpper(txtLname.Text[0]) + txtLname.Text.Substring(1).ToLower();
+            string fn = char.ToUpper(txtFname.Text[0]) + txtFname.Text.Substring(1).ToLower();
+            string ln = char.ToUpper(txtLname.Text[0]) + txtLname.Text.Substring(1).ToLower();
 
             try
             {
                 using (SqlConnection con = new SqlConnection(DBconnection.ConnectionString))
                 {
                     con.Open();
-                    string query = @"
-                        INSERT INTO Trainer (Fname, Lname, Gender, Shift, Speciality, Phone, Branch_ID)
-                        VALUES (@fn, @ln, @g, @sh, @sp, @ph, @bid)";
-
+                    string query = @"INSERT INTO Trainer (Fname, Lname, Gender, Shift, Speciality, Phone, Branch_ID)
+                                     VALUES (@fn, @ln, @g, @sh, @sp, @ph, @bid)";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@fn", formattedFname);
-                    cmd.Parameters.AddWithValue("@ln", formattedLname);
-                    cmd.Parameters.AddWithValue("@g",  comboBoxGender.Text);
+                    cmd.Parameters.AddWithValue("@fn", fn);
+                    cmd.Parameters.AddWithValue("@ln", ln);
+                    cmd.Parameters.AddWithValue("@g", comboBoxGender.Text);
                     cmd.Parameters.AddWithValue("@sh", comboBoxShift.SelectedIndex == -1 ? (object)DBNull.Value : comboBoxShift.Text);
                     cmd.Parameters.AddWithValue("@sp", comboBoxSpeciality.SelectedIndex == -1 ? (object)DBNull.Value : comboBoxSpeciality.Text);
                     cmd.Parameters.AddWithValue("@ph", txtPhone.Text.Trim());
                     cmd.Parameters.AddWithValue("@bid", comboBoxBranch.SelectedValue);
-
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Success: Trainer added successfully!");
                     LoadTrainerData();
@@ -244,10 +304,7 @@ namespace Gym_Management
                 else
                     MessageBox.Show("Database Error (" + ex.Number + "): " + ex.Message);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("General Error: " + ex.Message);
-            }
+            catch (Exception ex) { MessageBox.Show("General Error: " + ex.Message); }
         }
 
         private void Delete_Trainer_Click(object sender, EventArgs e)
@@ -270,12 +327,12 @@ namespace Gym_Management
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Trainer deleted successfully!");
                     LoadTrainerData();
+                    LoadWorkoutPlanData();
                     ClearFields();
                 }
             }
             catch (SqlException ex)
             {
-                // FK violation: trainer is assigned to a Workout_Plan or Class
                 if (ex.Number == 547)
                     MessageBox.Show("Cannot delete: This trainer is assigned to a Workout Plan or Class.");
                 else
@@ -295,43 +352,35 @@ namespace Gym_Management
                 using (SqlConnection con = new SqlConnection(DBconnection.ConnectionString))
                 {
                     con.Open();
-                    string query = @"
-                        UPDATE Trainer
-                        SET Fname       = COALESCE(NULLIF(@fn, ''), Fname),
-                            Lname       = COALESCE(NULLIF(@ln, ''), Lname),
-                            Gender      = COALESCE(NULLIF(@g, ''), Gender),
-                            Shift       = COALESCE(NULLIF(@sh, ''), Shift),
-                            Speciality  = COALESCE(NULLIF(@sp, ''), Speciality),
-                            Phone       = COALESCE(NULLIF(@ph, ''), Phone),
-                            Branch_ID   = COALESCE(@bid, Branch_ID)
-                        WHERE ID = @id";
 
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@id", selectedID);
+                    string setClause = "";
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
 
                     string fn = txtFname.Text.Trim();
                     string ln = txtLname.Text.Trim();
-                    cmd.Parameters.AddWithValue("@fn", string.IsNullOrEmpty(fn) ? "" : char.ToUpper(fn[0]) + fn.Substring(1).ToLower());
-                    cmd.Parameters.AddWithValue("@ln", string.IsNullOrEmpty(ln) ? "" : char.ToUpper(ln[0]) + ln.Substring(1).ToLower());
-                    cmd.Parameters.AddWithValue("@g",  comboBoxGender.SelectedIndex == -1 ? "" : comboBoxGender.Text);
-                    cmd.Parameters.AddWithValue("@sh", comboBoxShift.SelectedIndex == -1 ? "" : comboBoxShift.Text);
-                    cmd.Parameters.AddWithValue("@sp", comboBoxSpeciality.SelectedIndex == -1 ? "" : comboBoxSpeciality.Text);
-                    cmd.Parameters.AddWithValue("@ph", string.IsNullOrWhiteSpace(txtPhone.Text) ? "" : txtPhone.Text.Trim());
-                    cmd.Parameters.AddWithValue("@bid", comboBoxBranch.SelectedIndex == -1 ? (object)DBNull.Value : comboBoxBranch.SelectedValue);
+                    string ph = txtPhone.Text.Trim();
+
+                    if (!string.IsNullOrEmpty(fn)) { setClause += "Fname = @fn, "; cmd.Parameters.AddWithValue("@fn", char.ToUpper(fn[0]) + fn.Substring(1).ToLower()); }
+                    if (!string.IsNullOrEmpty(ln)) { setClause += "Lname = @ln, "; cmd.Parameters.AddWithValue("@ln", char.ToUpper(ln[0]) + ln.Substring(1).ToLower()); }
+                    if (comboBoxGender.SelectedIndex != -1) { setClause += "Gender = @g, "; cmd.Parameters.AddWithValue("@g", comboBoxGender.Text); }
+                    if (comboBoxShift.SelectedIndex != -1) { setClause += "Shift = @sh, "; cmd.Parameters.AddWithValue("@sh", comboBoxShift.Text); }
+                    if (comboBoxSpeciality.SelectedIndex != -1) { setClause += "Speciality = @sp, "; cmd.Parameters.AddWithValue("@sp", comboBoxSpeciality.Text); }
+                    if (!string.IsNullOrEmpty(ph)) { setClause += "Phone = @ph, "; cmd.Parameters.AddWithValue("@ph", ph); }
+                    if (comboBoxBranch.SelectedIndex != -1) { setClause += "Branch_ID = @bid, "; cmd.Parameters.AddWithValue("@bid", comboBoxBranch.SelectedValue); }
+
+                    if (string.IsNullOrEmpty(setClause))
+                    { MessageBox.Show("Nothing to update. Change the fields you want to modify first."); return; }
+
+                    setClause = setClause.TrimEnd(',', ' ');
+                    cmd.CommandText = "UPDATE Trainer SET " + setClause + " WHERE ID = @id";
+                    cmd.Parameters.AddWithValue("@id", selectedID);
 
                     int rows = cmd.ExecuteNonQuery();
-                    if (rows > 0)
-                    {
-                        MessageBox.Show("Update Successful: Changes saved.");
-                        LoadTrainerData();
-                        ClearFields();
-                    }
+                    if (rows > 0) { MessageBox.Show("Update Successful: Changes saved."); LoadTrainerData(); ClearFields(); }
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Update Error: " + ex.Message);
-            }
+            catch (Exception ex) { MessageBox.Show("Update Error: " + ex.Message); }
         }
 
         private void Search_Click(object sender, EventArgs e)
@@ -344,22 +393,14 @@ namespace Gym_Management
                     string query = "SELECT * FROM Trainer WHERE 1=1";
                     SqlCommand cmd = new SqlCommand();
 
-                    if (!string.IsNullOrWhiteSpace(txtID.Text))
-                    { query += " AND ID = @id"; cmd.Parameters.AddWithValue("@id", txtID.Text.Trim()); }
-                    if (!string.IsNullOrWhiteSpace(txtFname.Text))
-                    { query += " AND Fname LIKE @fn"; cmd.Parameters.AddWithValue("@fn", "%" + txtFname.Text.Trim() + "%"); }
-                    if (!string.IsNullOrWhiteSpace(txtLname.Text))
-                    { query += " AND Lname LIKE @ln"; cmd.Parameters.AddWithValue("@ln", "%" + txtLname.Text.Trim() + "%"); }
-                    if (!string.IsNullOrWhiteSpace(txtPhone.Text))
-                    { query += " AND Phone = @ph"; cmd.Parameters.AddWithValue("@ph", txtPhone.Text.Trim()); }
-                    if (comboBoxGender.SelectedIndex != -1)
-                    { query += " AND Gender = @g"; cmd.Parameters.AddWithValue("@g", comboBoxGender.Text); }
-                    if (comboBoxShift.SelectedIndex != -1)
-                    { query += " AND Shift = @sh"; cmd.Parameters.AddWithValue("@sh", comboBoxShift.Text); }
-                    if (comboBoxSpeciality.SelectedIndex != -1)
-                    { query += " AND Speciality = @sp"; cmd.Parameters.AddWithValue("@sp", comboBoxSpeciality.Text); }
-                    if (comboBoxBranch.SelectedIndex != -1)
-                    { query += " AND Branch_ID = @bid"; cmd.Parameters.AddWithValue("@bid", comboBoxBranch.SelectedValue); }
+                    if (!string.IsNullOrWhiteSpace(txtID.Text)) { query += " AND ID = @id"; cmd.Parameters.AddWithValue("@id", txtID.Text.Trim()); }
+                    if (!string.IsNullOrWhiteSpace(txtFname.Text)) { query += " AND Fname LIKE @fn"; cmd.Parameters.AddWithValue("@fn", "%" + txtFname.Text.Trim() + "%"); }
+                    if (!string.IsNullOrWhiteSpace(txtLname.Text)) { query += " AND Lname LIKE @ln"; cmd.Parameters.AddWithValue("@ln", "%" + txtLname.Text.Trim() + "%"); }
+                    if (!string.IsNullOrWhiteSpace(txtPhone.Text)) { query += " AND Phone = @ph"; cmd.Parameters.AddWithValue("@ph", txtPhone.Text.Trim()); }
+                    if (comboBoxGender.SelectedIndex != -1) { query += " AND Gender = @g"; cmd.Parameters.AddWithValue("@g", comboBoxGender.Text); }
+                    if (comboBoxShift.SelectedIndex != -1) { query += " AND Shift = @sh"; cmd.Parameters.AddWithValue("@sh", comboBoxShift.Text); }
+                    if (comboBoxSpeciality.SelectedIndex != -1) { query += " AND Speciality = @sp"; cmd.Parameters.AddWithValue("@sp", comboBoxSpeciality.Text); }
+                    if (comboBoxBranch.SelectedIndex != -1) { query += " AND Branch_ID = @bid"; cmd.Parameters.AddWithValue("@bid", comboBoxBranch.SelectedValue); }
 
                     cmd.Connection = con;
                     cmd.CommandText = query;
@@ -368,21 +409,111 @@ namespace Gym_Management
                     da.Fill(dt);
                     dataGridView1.DataSource = dt;
 
-                    if (dt.Rows.Count == 0)
-                        MessageBox.Show("No trainers found matching those filters.");
-
+                    if (dt.Rows.Count == 0) MessageBox.Show("No trainers found matching those filters.");
                     ClearFields();
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) { MessageBox.Show("An error occurred during search: " + ex.Message); }
+        }
+
+        private void Add_Plan_Click(object sender, EventArgs e)
+        {
+            if (_selectedTrainerID == -1)
+            { MessageBox.Show("Please select a trainer from the table above first."); return; }
+            if (comboBoxWP_Name.SelectedIndex == -1)
+            { MessageBox.Show("Please select a Plan Name."); return; }
+            if (string.IsNullOrWhiteSpace(txtWP_Duration.Text) || !int.TryParse(txtWP_Duration.Text.Trim(), out int dur) || dur <= 0)
+            { MessageBox.Show("Duration must be a positive number (weeks)."); return; }
+            if (comboBoxWP_Intensity.SelectedIndex == -1)
+            { MessageBox.Show("Please select an Intensity Level."); return; }
+
+            try
             {
-                MessageBox.Show("An error occurred during search: " + ex.Message);
+                using (SqlConnection con = new SqlConnection(DBconnection.ConnectionString))
+                {
+                    con.Open();
+                    string query = @"INSERT INTO Workout_Plan (Name, Duration, Intensity_Level, Trainer_ID)
+                                     VALUES (@name, @dur, @intens, @tid)";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@name", comboBoxWP_Name.Text);
+                    cmd.Parameters.AddWithValue("@dur", dur);
+                    cmd.Parameters.AddWithValue("@intens", comboBoxWP_Intensity.Text);
+                    cmd.Parameters.AddWithValue("@tid", _selectedTrainerID);
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Workout Plan added successfully!");
+                    LoadWorkoutPlanData();
+                    ClearPlanFields();
+                }
+            }
+            catch (Exception ex) { MessageBox.Show("Error adding plan: " + ex.Message); }
+        }
+
+        private void Delete_Plan_Click(object sender, EventArgs e)
+        {
+            if (dataGridView2.SelectedRows.Count == 0)
+            { MessageBox.Show("Please select a plan from the table to delete."); return; }
+
+            int planID = Convert.ToInt32(dataGridView2.SelectedRows[0].Cells["ID"].Value);
+
+            if (MessageBox.Show("Delete this workout plan?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.No) return;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DBconnection.ConnectionString))
+                {
+                    con.Open();
+                    SqlCommand cmd = new SqlCommand("DELETE FROM Workout_Plan WHERE ID = @id", con);
+                    cmd.Parameters.AddWithValue("@id", planID);
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Plan deleted successfully!");
+                    LoadWorkoutPlanData();
+                    ClearPlanFields();
+                }
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 547)
+                    MessageBox.Show("Cannot delete: This plan is assigned to one or more members.");
+                else
+                    MessageBox.Show("Database Error: " + ex.Message);
             }
         }
 
-        #endregion
+        private void Search_Plan_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(DBconnection.ConnectionString))
+                {
+                    con.Open();
+                    string query = @"SELECT wp.ID, wp.Name, wp.Duration, wp.Intensity_Level,
+                                            t.Fname + ' ' + t.Lname AS Trainer
+                                     FROM Workout_Plan wp
+                                     JOIN Trainer t ON wp.Trainer_ID = t.ID
+                                     WHERE 1=1";
+                    SqlCommand cmd = new SqlCommand();
 
-        // Empty stubs required by Designer
+                    if (comboBoxWP_Name.SelectedIndex != -1) { query += " AND wp.Name = @name"; cmd.Parameters.AddWithValue("@name", comboBoxWP_Name.Text); }
+                    if (comboBoxWP_Intensity.SelectedIndex != -1) { query += " AND wp.Intensity_Level = @intens"; cmd.Parameters.AddWithValue("@intens", comboBoxWP_Intensity.Text); }
+                    if (!string.IsNullOrWhiteSpace(txtWP_Duration.Text) && int.TryParse(txtWP_Duration.Text.Trim(), out int dur))
+                    { query += " AND wp.Duration = @dur"; cmd.Parameters.AddWithValue("@dur", dur); }
+                    if (_selectedTrainerID != -1) { query += " AND wp.Trainer_ID = @tid"; cmd.Parameters.AddWithValue("@tid", _selectedTrainerID); }
+
+                    cmd.Connection = con;
+                    cmd.CommandText = query;
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    dataGridView2.DataSource = dt;
+                    ApplyStyle(dataGridView2);
+
+                    if (dt.Rows.Count == 0) MessageBox.Show("No plans found matching those filters.");
+                    ClearPlanFields();
+                }
+            }
+            catch (Exception ex) { MessageBox.Show("Search Error: " + ex.Message); }
+        }
+
         private void Trainers_Load(object sender, EventArgs e) { }
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
     }

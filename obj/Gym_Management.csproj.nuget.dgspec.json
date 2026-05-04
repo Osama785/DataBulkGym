@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sch\\source\\repos\\Gym_Management\\Gym_Management\\Gym_Management.csproj": {}
+    "C:\\Users\\Owner\\Desktop\\DB\\DataBulkGym\\Gym_Management.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sch\\source\\repos\\Gym_Management\\Gym_Management\\Gym_Management.csproj": {
+    "C:\\Users\\Owner\\Desktop\\DB\\DataBulkGym\\Gym_Management.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sch\\source\\repos\\Gym_Management\\Gym_Management\\Gym_Management.csproj",
+        "projectUniqueName": "C:\\Users\\Owner\\Desktop\\DB\\DataBulkGym\\Gym_Management.csproj",
         "projectName": "Gym_Management",
-        "projectPath": "C:\\Users\\sch\\source\\repos\\Gym_Management\\Gym_Management\\Gym_Management.csproj",
-        "packagesPath": "C:\\Users\\sch\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sch\\source\\repos\\Gym_Management\\Gym_Management\\obj\\",
+        "projectPath": "C:\\Users\\Owner\\Desktop\\DB\\DataBulkGym\\Gym_Management.csproj",
+        "packagesPath": "C:\\Users\\Owner\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Owner\\Desktop\\DB\\DataBulkGym\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\sch\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Owner\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -79,7 +78,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

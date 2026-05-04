@@ -8,7 +8,7 @@ namespace Gym_Management
 {
         internal class DBconnection
         {
-                public static string ConnectionString = @"Server=(localdb)\MSSQLLocalDB;Database=GymManagementDB;Trusted_Connection=True;";
+                public static string ConnectionString = @"Server=localhost\SQLEXPRESS; Database=GymManagementDB; Integrated Security=True; TrustServerCertificate=True;";
 
         public static SqlConnection GetConnection()
         {

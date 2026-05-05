@@ -26,7 +26,10 @@ namespace Gym_Management
 
         private void button3_Click(object sender, EventArgs e)
         {
-            // Add Schedule form logic here
+            ClassScheduler sched = new ClassScheduler();
+            sched.FormClosed += (s, args) => Application.Exit();
+            sched.Show();
+            this.Hide();
         }
 
         private void button4_Click(object sender, EventArgs e)

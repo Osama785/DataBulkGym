@@ -27,6 +27,8 @@
         private DateTimePicker dtPurchaseDate;
 
         private Button btnBack;
+        private Button btnSearch;
+        private TextBox txtSearchBranchID;
 
         protected override void Dispose(bool disposing)
         {
@@ -66,7 +68,7 @@
             ((System.ComponentModel.ISupportInitialize)dgvBranch).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvOffers).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvEquipment).BeginInit();
-            this.BackColor = Color.FromArgb(144, 169, 197);
+            this.BackColor = SystemColors.ActiveCaption;
             SuspendLayout();
             
             dgvBranch.Location = new Point(20, 100);
@@ -225,11 +227,28 @@
             btnBack.Size = new Size(100, 30);
             btnBack.TabIndex = 50;
             btnBack.Text = "Back";
-            btnBack.BackColor = Color.DarkCyan;
+            btnBack.BackColor = Color.DarkTurquoise;
             btnBack.ForeColor = Color.White;
-            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.FlatStyle = FlatStyle.Standard;
+            btnBack.UseVisualStyleBackColor = false;
             btnBack.Click += btnBack_Click;
             this.Controls.Add(btnBack);
+
+            txtSearchBranchID = new TextBox();
+            txtSearchBranchID.Location = new Point(480, 60);
+            txtSearchBranchID.Size = new Size(100, 23);
+            txtSearchBranchID.PlaceholderText = "Branch ID";
+            txtSearchBranchID.Name = "txtSearchBranchID";
+
+            btnSearch = new Button();
+            btnSearch.Location = new Point(600, 60);
+            btnSearch.Size = new Size(75, 23);
+            btnSearch.Text = "Search";
+            btnSearch.Click += btnSearch_Click;
+
+            
+            Controls.Add(txtSearchBranchID);
+            Controls.Add(btnSearch);
 
             ApplyGridTheme(dgvBranch);
             ApplyGridTheme(dgvOffers);

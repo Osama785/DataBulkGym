@@ -32,7 +32,7 @@
             Member_Mangment = new Button();
             button2 = new Button();
             button3 = new Button();
-            Membership = new Button();
+            Equpment_inventory = new Button();
             Branch_Manger_info = new Button();
             SuspendLayout();
             // 
@@ -45,7 +45,7 @@
             Member_Mangment.Name = "Member_Mangment";
             Member_Mangment.Size = new Size(302, 50);
             Member_Mangment.TabIndex = 0;
-            Member_Mangment.Text = "Member Mangment ";
+            Member_Mangment.Text = "Member Management ";
             Member_Mangment.UseVisualStyleBackColor = true;
             Member_Mangment.Click += button1_Click;
             // 
@@ -56,7 +56,7 @@
             button2.Name = "button2";
             button2.Size = new Size(302, 52);
             button2.TabIndex = 1;
-            button2.Text = "trainer Mangment";
+            button2.Text = "Trainer Management";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
@@ -67,20 +67,20 @@
             button3.Name = "button3";
             button3.Size = new Size(302, 49);
             button3.TabIndex = 2;
-            button3.Text = "Class Scudule";
+            button3.Text = "Class Schedule Management";
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
-            // Membership
+            // Equpment_inventory
             // 
-            Membership.Anchor = AnchorStyles.None;
-            Membership.Location = new Point(124, 275);
-            Membership.Name = "Membership";
-            Membership.Size = new Size(302, 55);
-            Membership.TabIndex = 3;
-            Membership.Text = "Membership";
-            Membership.UseVisualStyleBackColor = true;
-            Membership.Click += button4_Click;
+            Equpment_inventory.Anchor = AnchorStyles.None;
+            Equpment_inventory.Location = new Point(124, 275);
+            Equpment_inventory.Name = "Equpment_inventory";
+            Equpment_inventory.Size = new Size(302, 55);
+            Equpment_inventory.TabIndex = 3;
+            Equpment_inventory.Text = "Membership Management";
+            Equpment_inventory.UseVisualStyleBackColor = true;
+            Equpment_inventory.Click += button4_Click;
             // 
             // Branch_Manger_info
             // 
@@ -89,7 +89,7 @@
             Branch_Manger_info.Name = "Branch_Manger_info";
             Branch_Manger_info.Size = new Size(302, 53);
             Branch_Manger_info.TabIndex = 4;
-            Branch_Manger_info.Text = "Branch /Manger info";
+            Branch_Manger_info.Text = "Branch Management";
             Branch_Manger_info.UseVisualStyleBackColor = true;
             Branch_Manger_info.Click += button5_Click;
             // 
@@ -103,7 +103,7 @@
             Controls.Add(button3);
             Controls.Add(Member_Mangment);
             Controls.Add(button2);
-            Controls.Add(Membership);
+            Controls.Add(Equpment_inventory);
             Controls.Add(Branch_Manger_info);
             DoubleBuffered = true;
             Name = "DashBord";
@@ -118,7 +118,7 @@
         private Button Member_Mangment;
         private Button button2;
         private Button button3;
-        private Button Membership;
+        private Button Equpment_inventory;
         private Button Branch_Manger_info;
     }
 }

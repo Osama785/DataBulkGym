@@ -65,155 +65,219 @@
             btnDeleteEquipment = new Button();
             btnBack = new Button();
             label1 = new Label();
+            txtSearchBranchID = new TextBox();
+            btnSearch = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvBranch).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvOffers).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvEquipment).BeginInit();
-            this.BackColor = SystemColors.ActiveCaption;
             SuspendLayout();
-            
+            // 
+            // dgvBranch
+            // 
             dgvBranch.Location = new Point(20, 100);
             dgvBranch.Name = "dgvBranch";
             dgvBranch.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvBranch.Size = new Size(863, 200);
             dgvBranch.TabIndex = 15;
             dgvBranch.CellClick += dgvBranch_CellClick;
-       
+            // 
+            // dgvOffers
+            // 
             dgvOffers.Location = new Point(20, 320);
             dgvOffers.Name = "dgvOffers";
             dgvOffers.Size = new Size(222, 250);
             dgvOffers.TabIndex = 16;
-
+            // 
+            // dgvEquipment
+            // 
             dgvEquipment.Location = new Point(260, 320);
             dgvEquipment.Name = "dgvEquipment";
             dgvEquipment.Size = new Size(543, 250);
             dgvEquipment.TabIndex = 17;
             dgvEquipment.CellClick += dgvEquipment_CellClick;
-
+            // 
+            // txtCity
+            // 
             txtCity.Location = new Point(160, 20);
             txtCity.Name = "txtCity";
             txtCity.PlaceholderText = "City";
             txtCity.Size = new Size(100, 23);
             txtCity.TabIndex = 1;
-
+            // 
+            // txtArea
+            // 
             txtArea.Location = new Point(300, 20);
             txtArea.Name = "txtArea";
             txtArea.PlaceholderText = "Area";
             txtArea.Size = new Size(100, 23);
             txtArea.TabIndex = 2;
-
+            // 
+            // txtManagerFname
+            // 
             txtManagerFname.Location = new Point(440, 20);
             txtManagerFname.Name = "txtManagerFname";
             txtManagerFname.PlaceholderText = "First Name";
             txtManagerFname.Size = new Size(100, 23);
             txtManagerFname.TabIndex = 3;
-
+            // 
+            // txtManagerLname
+            // 
             txtManagerLname.Location = new Point(600, 20);
             txtManagerLname.Name = "txtManagerLname";
             txtManagerLname.PlaceholderText = "Last Name";
             txtManagerLname.Size = new Size(100, 23);
             txtManagerLname.TabIndex = 4;
-           
+            // 
+            // txtManagerPhone
+            // 
             txtManagerPhone.Location = new Point(760, 20);
             txtManagerPhone.Name = "txtManagerPhone";
             txtManagerPhone.PlaceholderText = "Phone";
             txtManagerPhone.Size = new Size(100, 23);
             txtManagerPhone.TabIndex = 5;
-           
+            // 
+            // lblBranchType
+            // 
             lblBranchType.AutoSize = true;
             lblBranchType.Location = new Point(20, 4);
             lblBranchType.Name = "lblBranchType";
             lblBranchType.Size = new Size(74, 15);
             lblBranchType.TabIndex = 6;
             lblBranchType.Text = "Branch Type:";
-            
+            // 
+            // lblCity
+            // 
             lblCity.Location = new Point(0, 0);
             lblCity.Name = "lblCity";
             lblCity.Size = new Size(100, 23);
             lblCity.TabIndex = 7;
-            
+            // 
+            // lblArea
+            // 
             lblArea.Location = new Point(0, 0);
             lblArea.Name = "lblArea";
             lblArea.Size = new Size(100, 23);
             lblArea.TabIndex = 8;
-           
+            // 
+            // lblFname
+            // 
             lblFname.Location = new Point(0, 0);
             lblFname.Name = "lblFname";
             lblFname.Size = new Size(100, 23);
             lblFname.TabIndex = 9;
-            
+            // 
+            // lblLname
+            // 
             lblLname.Location = new Point(0, 0);
             lblLname.Name = "lblLname";
             lblLname.Size = new Size(100, 23);
             lblLname.TabIndex = 10;
-             
+            // 
+            // lblPhone
+            // 
             lblPhone.Location = new Point(0, 0);
             lblPhone.Name = "lblPhone";
             lblPhone.Size = new Size(100, 23);
             lblPhone.TabIndex = 11;
-            
+            // 
+            // comboType
+            // 
             comboType.Location = new Point(20, 20);
             comboType.Name = "comboType";
             comboType.Size = new Size(120, 23);
             comboType.TabIndex = 0;
-            
+            // 
+            // btnAdd
+            // 
             btnAdd.Location = new Point(160, 60);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(75, 23);
             btnAdd.TabIndex = 12;
             btnAdd.Text = "Add";
             btnAdd.Click += btnAdd_Click;
-            
+            // 
+            // btnUpdate
+            // 
             btnUpdate.Location = new Point(260, 60);
             btnUpdate.Name = "btnUpdate";
             btnUpdate.Size = new Size(75, 23);
             btnUpdate.TabIndex = 13;
             btnUpdate.Text = "Update";
             btnUpdate.Click += btnUpdate_Click;
-            
+            // 
+            // btnDelete
+            // 
             btnDelete.Location = new Point(361, 60);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(75, 23);
             btnDelete.TabIndex = 14;
             btnDelete.Text = "Delete";
             btnDelete.Click += btnDelete_Click;
-            
+            // 
+            // txtEquipName
+            // 
             txtEquipName.Location = new Point(820, 320);
             txtEquipName.Name = "txtEquipName";
             txtEquipName.PlaceholderText = "Equipment Name";
             txtEquipName.Size = new Size(100, 23);
             txtEquipName.TabIndex = 20;
-           
+            // 
+            // dtPurchaseDate
+            // 
             dtPurchaseDate.Location = new Point(820, 375);
             dtPurchaseDate.Name = "dtPurchaseDate";
             dtPurchaseDate.Size = new Size(200, 23);
             dtPurchaseDate.TabIndex = 21;
-            
+            // 
+            // txtEquipDuration
+            // 
             txtEquipDuration.Location = new Point(820, 416);
             txtEquipDuration.Name = "txtEquipDuration";
             txtEquipDuration.PlaceholderText = "Maintenance Duration";
             txtEquipDuration.Size = new Size(128, 23);
             txtEquipDuration.TabIndex = 22;
-                        btnAddEquipment.Location = new Point(820, 455);
+            // 
+            // btnAddEquipment
+            // 
+            btnAddEquipment.Location = new Point(820, 455);
             btnAddEquipment.Name = "btnAddEquipment";
             btnAddEquipment.Size = new Size(75, 23);
             btnAddEquipment.TabIndex = 23;
             btnAddEquipment.Text = "Add Equipment";
             btnAddEquipment.Click += btnAddEquipment_Click;
-            
+            // 
+            // btnUpdateEquipment
+            // 
             btnUpdateEquipment.Location = new Point(820, 495);
             btnUpdateEquipment.Name = "btnUpdateEquipment";
             btnUpdateEquipment.Size = new Size(75, 23);
             btnUpdateEquipment.TabIndex = 18;
             btnUpdateEquipment.Text = "Update Equipment";
             btnUpdateEquipment.Click += btnUpdateEquipment_Click;
-            
+            // 
+            // btnDeleteEquipment
+            // 
             btnDeleteEquipment.Location = new Point(820, 535);
             btnDeleteEquipment.Name = "btnDeleteEquipment";
             btnDeleteEquipment.Size = new Size(75, 23);
             btnDeleteEquipment.TabIndex = 19;
             btnDeleteEquipment.Text = "Delete Equipment";
             btnDeleteEquipment.Click += btnDeleteEquipment_Click;
-            
+            // 
+            // btnBack
+            // 
+            btnBack.BackColor = Color.DarkTurquoise;
+            btnBack.ForeColor = Color.Black;
+            btnBack.Location = new Point(1050, 20);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(100, 30);
+            btnBack.TabIndex = 50;
+            btnBack.Text = "Back";
+            btnBack.UseVisualStyleBackColor = false;
+            btnBack.Click += btnBack_Click;
+            // 
+            // label1
+            // 
             label1.AutoSize = true;
             label1.Location = new Point(820, 357);
             label1.Name = "label1";
@@ -221,40 +285,31 @@
             label1.TabIndex = 24;
             label1.Text = "Purchase Date";
             label1.Click += label1_Click;
-
-            btnBack.Location = new Point(1050, 20); 
-            btnBack.Name = "btnBack";
-            btnBack.Size = new Size(100, 30);
-            btnBack.TabIndex = 50;
-            btnBack.Text = "Back";
-            btnBack.BackColor = Color.DarkTurquoise;
-            btnBack.ForeColor = Color.White;
-            btnBack.FlatStyle = FlatStyle.Standard;
-            btnBack.UseVisualStyleBackColor = false;
-            btnBack.Click += btnBack_Click;
-            this.Controls.Add(btnBack);
-
-            txtSearchBranchID = new TextBox();
+            // 
+            // txtSearchBranchID
+            // 
             txtSearchBranchID.Location = new Point(480, 60);
-            txtSearchBranchID.Size = new Size(100, 23);
-            txtSearchBranchID.PlaceholderText = "Branch ID";
             txtSearchBranchID.Name = "txtSearchBranchID";
-
-            btnSearch = new Button();
+            txtSearchBranchID.PlaceholderText = "Branch ID";
+            txtSearchBranchID.Size = new Size(100, 23);
+            txtSearchBranchID.TabIndex = 51;
+            // 
+            // btnSearch
+            // 
             btnSearch.Location = new Point(600, 60);
+            btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(75, 23);
+            btnSearch.TabIndex = 52;
             btnSearch.Text = "Search";
             btnSearch.Click += btnSearch_Click;
-
-            
+            // 
+            // Branch
+            // 
+            BackColor = SystemColors.ActiveCaption;
+            ClientSize = new Size(1184, 661);
+            Controls.Add(btnBack);
             Controls.Add(txtSearchBranchID);
             Controls.Add(btnSearch);
-
-            ApplyGridTheme(dgvBranch);
-            ApplyGridTheme(dgvOffers);
-            ApplyGridTheme(dgvEquipment);
-
-            ClientSize = new Size(1184, 661);
             Controls.Add(label1);
             Controls.Add(comboType);
             Controls.Add(txtCity);

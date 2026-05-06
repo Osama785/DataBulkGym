@@ -15,12 +15,12 @@ namespace Gym_Management
     public partial class Branch : Form
     {
         private int selectedEquipmentId = -1;
-        public Branch()
+        private DashBord dashboard;
+        public Branch(DashBord dash)
         {
             InitializeComponent();
-
+            dashboard = dash;
             SetupTypeCombo();
-
             LoadBranchData();
             LoadOffers();
             LoadEquipment();
@@ -39,6 +39,22 @@ namespace Gym_Management
             txtManagerFname.Clear();
             txtManagerLname.Clear();
             txtManagerPhone.Clear();
+        }
+        private void SearchBranchById(int id)
+        {
+            using (SqlConnection con = new SqlConnection(DBconnection.ConnectionString))
+            {
+                string query = "SELECT * FROM Branch_Manager WHERE Branch_ID = @id";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                dgvBranch.DataSource = dt;
+            }
         }
 
         private void LoadBranchData()
@@ -196,6 +212,24 @@ namespace Gym_Management
                 LoadEquipment();
             }
         }
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtSearchBranchID.Text))
+            {
+                LoadBranchData();
+                LoadOffers();
+                LoadEquipment();
+                return;
+            }
+
+            if (!int.TryParse(txtSearchBranchID.Text, out int id))
+            {
+                MessageBox.Show("Enter a valid Branch ID.");
+                return;
+            }
+
+            SearchBranchById(id);
+        }
 
         private void dgvEquipment_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -351,9 +385,8 @@ namespace Gym_Management
         }
         private void btnBack_Click(object sender, EventArgs e)
         {
-            DashBord dashboard = new DashBord();
-            dashboard.Show();
-            this.Close();
+            dashboard.Show();  
+            this.Close();      
         }
     }
 }

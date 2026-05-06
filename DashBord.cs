@@ -42,7 +42,9 @@ namespace Gym_Management
 
         private void button5_Click(object sender, EventArgs e)
         {
-            // Add Branch form logic here
+            Branch branch = new Branch(this);
+            branch.Show();
+            this.Hide();
         }
 
         private void Member_Load(object sender, EventArgs e) { }

@@ -78,9 +78,8 @@ namespace Gym_Management
             }
             catch (Exception ex)
             {
-                // Line 8: Safety net.
                 // If anything fails (wrong query, server down, etc.), we catch it here.
-                // We show a message box so the user knows something went wrong, instead of the app crashing silently.
+                // We show a message box so the user knows something went wrong
                 MessageBox.Show("Class Table Error: " + ex.Message);
             }
         }
@@ -144,7 +143,7 @@ namespace Gym_Management
                 using (SqlConnection con = new SqlConnection(DBconnection.ConnectionString))
                 {
                     con.Open();
-                    // Combine name and speciality for a friendly display
+                    // Combine name and speciality for display
                     string query = "SELECT ID, Fname + ' ' + Lname + ' (' + Speciality + ')' AS TrainerInfo FROM Trainer";
                     SqlDataAdapter sda = new SqlDataAdapter(query, con);
                     DataTable dt = new DataTable();
@@ -209,7 +208,7 @@ namespace Gym_Management
 
         private void btnAddClass_Click(object sender, EventArgs e)
         {
-            // 1. VALIDATION
+            // validation
             if (string.IsNullOrWhiteSpace(txtClassName.Text))
             { MessageBox.Show("Class name cannot be empty."); return; }
             if (cmbTrainer.SelectedIndex == -1)
@@ -222,7 +221,7 @@ namespace Gym_Management
                 using (SqlConnection con = new SqlConnection(DBconnection.ConnectionString))
                 {
                     con.Open();
-                    // Begin a transaction: All or nothing
+                    // Begin a transaction: all or nothing
                     using (SqlTransaction tran = con.BeginTransaction())
                     {
                         try
@@ -235,7 +234,7 @@ namespace Gym_Management
                             cmdClass.Parameters.AddWithValue("@name", txtClassName.Text.Trim());
                             cmdClass.Parameters.AddWithValue("@tid", cmbTrainer.SelectedValue);
 
-                            // ExecuteScalar returns the first column of the first row (our new ID)
+                            // ExecuteScalar (return is one value) returns the first column of the first row (our new ID)
                             int newClassId = Convert.ToInt32(cmdClass.ExecuteScalar());
 
                             //  Insert Schedule for the new class
@@ -285,7 +284,7 @@ namespace Gym_Management
 
         private void btnAddScheduleOnly_Click(object sender, EventArgs e)
         {
-            // 1. VALIDATION
+            // validation
             if (_selectedClassID == -1)
             {
                 MessageBox.Show("Please select a class from the table first.");
@@ -303,7 +302,7 @@ namespace Gym_Management
                 {
                     con.Open();
 
-                    //GUARD CHECK: Verify class doesn't already have a schedule on this day
+                    //GUARD CHECK: Verify class doesn't already have a schedule on this day because class scheduler primary key= classid + day
                     string checkQuery = @"SELECT COUNT(*) FROM Class_Schedule 
                                   WHERE Class_ID = @cid AND Day = @day";
                     SqlCommand checkCmd = new SqlCommand(checkQuery, con);
@@ -361,7 +360,7 @@ namespace Gym_Management
             // CHECK: Is this the same class already selected?
             if (_selectedClassID == clickedClassID)
             {
-                // YES → DESELECT EVERYTHING
+                // yes -> deselect everything
                 dgvClasses.ClearSelection();
                 dgvSchedules.ClearSelection();
 
@@ -376,7 +375,7 @@ namespace Gym_Management
                 _selectedScheduleTime = "";
                 _currentContext = SelectionContext.None;
 
-                // Show ALL schedules
+                // Show all schedules
                 LoadScheduleData();
 
                 // Disable buttons
@@ -384,7 +383,7 @@ namespace Gym_Management
             }
             else
             {
-                // NO → SELECT THIS CLASS
+                // no -> select this class
                 _currentContext = SelectionContext.Class;
                 _selectedClassID = clickedClassID;
 
@@ -411,7 +410,7 @@ namespace Gym_Management
                 cmbDay.SelectedIndex = -1;
                 dtpTime.Value = DateTime.Today.AddHours(9);
 
-                // Load ONLY this class's schedules
+                // Load this class's schedules
                 LoadScheduleData(_selectedClassID);
 
                 // Enable class buttons
@@ -499,14 +498,14 @@ namespace Gym_Management
 
         private void btnDeleteClass_Click(object sender, EventArgs e)
         {
-            // 1. VALIDATION
+            // validation
             if (_selectedClassID == -1)
             {
                 MessageBox.Show("Please select a class from the table to delete.");
                 return;
             }
 
-            // 2. CONFIRMATION
+            // confirmation
             if (MessageBox.Show(
                 "Are you sure you want to delete this class?\n\nThis will also delete ALL its schedules.",
                 "Confirm Delete",
@@ -560,7 +559,7 @@ namespace Gym_Management
             string day = _selectedScheduleDay;
             string time = _selectedScheduleTime;
 
-            // 1. VALIDATION
+            // validation
             if (classId == -1)
             {
                 MessageBox.Show("Please select a class first.");
@@ -572,7 +571,7 @@ namespace Gym_Management
                 return;
             }
 
-            // 2. CONFIRMATION
+            // confirmation
             if (MessageBox.Show(
                 $"Delete schedule for {day} at {time}?\n\nThis will NOT delete the class itself.",
                 "Confirm Delete Schedule",
@@ -599,7 +598,7 @@ namespace Gym_Management
                     {
                         MessageBox.Show("Schedule deleted successfully!");
 
-                        // IMMEDIATELY clear state to prevent double-delete
+                        //  clear state to prevent double-delete
                         _selectedScheduleDay = "";
                         _selectedScheduleTime = "";
 
@@ -626,7 +625,7 @@ namespace Gym_Management
 
         private void btnUpdateClass_Click(object sender, EventArgs e)
         {
-            // 1. VALIDATION
+            //validation
             if (_selectedClassID == -1)
             {
                 MessageBox.Show("Please select a class from the table to update.");
@@ -643,7 +642,7 @@ namespace Gym_Management
                 return;
             }
 
-            // 2. CONFIRMATION
+            // confirmation
             if (MessageBox.Show(
                 "Update this class with the new details?\n\nThis will NOT change the schedule.",
                 "Confirm Update",
@@ -657,7 +656,7 @@ namespace Gym_Management
                 {
                     con.Open();
 
-                    // 3. UPDATE CLASS (Name and Trainer only)
+                    // update class (Name and Trainer only)
                     string query = @"UPDATE Class 
                              SET Name = @name, 
                                  Trainer_ID = @tid 
@@ -674,7 +673,7 @@ namespace Gym_Management
                     {
                         MessageBox.Show("Class updated successfully!");
 
-                        // 4. REFRESH UI
+                        // refresh ui
                         LoadClassData();
 
                         // Keep class selected but refresh its display

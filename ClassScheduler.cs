@@ -644,7 +644,7 @@ namespace Gym_Management
 
             // confirmation
             if (MessageBox.Show(
-                "Update this class with the new details?\n\nThis will NOT change the schedule.",
+                "Update this class with the new details?",
                 "Confirm Update",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question) == DialogResult.No)
